@@ -10,10 +10,11 @@ class DB
     private $config = [
         'driver' => 'mysql',
         'host' => 'localhost',
+        'port' => '8889',
         'dbname' => 'gbphp',
         'charset' => 'UTF8',
         'username' => 'root',
-        'password' => '',
+        'password' => 'xq4q5r',
     ];
 
     /**
@@ -39,9 +40,10 @@ class DB
     private function getDsn()
     {
         return sprintf(
-            '%s:host=%s;dbname=%s;charset=%s',
+            '%s:host=%s;port=%s;dbname=%s;charset=%s',
                 $this->config['driver'],
                 $this->config['host'],
+                $this->config['port'],
                 $this->config['dbname'],
                 $this->config['charset']
         );
@@ -64,8 +66,26 @@ class DB
         return $this->query($sql, $params)->fetchAll();
     }
 
+    public function findObject($sql, $className, $params = [])
+    {
+        $statement = $this->query($sql, $params);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, $className);
+        return $statement->fetch();
+    }
+
+    public function findAllObjects($sql, $className, $params = [])
+    {
+        $statement = $this->query($sql, $params);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, $className);
+        return $statement->fetchAll();
+    }
+
     public function execute(string $sql, array $params = [])
     {
         $this->query($sql, $params);
+    }
+    public function lastInsertId ()
+    {
+        return $this->getConnection()->lastInsertId();
     }
 }

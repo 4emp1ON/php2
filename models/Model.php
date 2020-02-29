@@ -36,20 +36,47 @@ abstract class Model
         return $this->db->findAll($sql);
     }
 
+    public function getOneObject($id)
+    {
+        $sql = "SELECT * FROM {$this->getTableName()} WHERE id = :id";
+        return $this->db->findObject($sql, static::class, [':id' => $id]);
+    }
+
+    public function getAllObjects()
+    {
+        $sql = "SELECT * FROM {$this->getTableName()}";
+        return $this->db->findAllObjects($sql, static::class);
+    }
+
     protected function insert()
     {
         foreach ($this as $key => $value) {
-            echo 'Key^ ' . $key;
-            var_dump($value);
+            if ($key == 'db') {
+                continue;
+            }
+            $keys[] = $key;
+            $values[":{$key}"] = $value;
         }
+        $cols = implode(', ', $keys);
+        $valuesString = implode(',', array_keys($values));
+        $sql = "INSERT INTO {$this->getTableName()} ({$cols}) VALUES ({$valuesString})";
+        $this->db->execute($sql, $values);
+        $this->id = $this->db->lastInsertId();
     }
 
-    protected function update()
+    public function update()
     {
         foreach ($this as $key => $value) {
-            echo 'Key^ ' . $key;
-            var_dump($value);
+            if ($key == 'db') {
+                continue;
+            }
+            $statementsToUpdate[] = " {$key} = :{$key} ";
+            $values[":{$key}"] = $value;
         }
+
+        $implodedStatments = implode(',', $statementsToUpdate);
+        $sql = "UPDATE {$this->getTableName()} SET {$implodedStatments} WHERE id={$this->id}";
+        $this->db->execute($sql, $values);
     }
 
     public function delete()
