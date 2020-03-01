@@ -5,78 +5,74 @@ use App\services\DB;
 
 /**
  * Class Model
+ * @property $id
  */
 abstract class Model
 {
-
     /**
      * @var DB
      */
     protected $db;
 
-    abstract protected function getTableName():string ;
+    abstract protected static function getTableName():string ;
 
     /**
      * Model constructor.
      */
     public function __construct()
     {
-        $this->db = DB::getInstance();
+        $this->db = static::getDB();
     }
 
-    public function getOne($id)
+    /**
+     * @return DB
+     */
+    protected static function getDB()
     {
-        $sql = "SELECT * FROM {$this->getTableName()} WHERE id = :id";
-        return $this->db->find($sql, [':id' => $id]);
+        return DB::getInstance();
     }
 
-    public function getAll()
+    public static function getOne($id)
     {
-        $sql = "SELECT * FROM {$this->getTableName()}";
-        return $this->db->findAll($sql);
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM {$tableName} WHERE id = :id";
+        return static::getDB()->findObject($sql, static::class, [':id' => $id]);
     }
 
-    public function getOneObject($id)
+    public static function getAll()
     {
-        $sql = "SELECT * FROM {$this->getTableName()} WHERE id = :id";
-        return $this->db->findObject($sql, static::class, [':id' => $id]);
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM {$tableName}";
+        return static::getDB()->findObjects($sql, static::class);
     }
 
-    public function getAllObjects()
+    public function insert()
     {
-        $sql = "SELECT * FROM {$this->getTableName()}";
-        return $this->db->findAllObjects($sql, static::class);
-    }
-
-    protected function insert()
-    {
+        $columns = [];
+        $params = [];
         foreach ($this as $key => $value) {
-            if ($key == 'db') {
+            if ($key === 'db') {
                 continue;
             }
-            $keys[] = $key;
-            $values[":{$key}"] = $value;
+            $columns[] = $key;
+            $params[":{$key}"] = $value;
         }
-        $cols = implode(', ', $keys);
-        $valuesString = implode(',', array_keys($values));
-        $sql = "INSERT INTO {$this->getTableName()} ({$cols}) VALUES ({$valuesString})";
-        $this->db->execute($sql, $values);
+
+        $tableName = $this->getTableName();
+        $fields = implode(',', $columns);
+        $placeholders = implode(',', array_keys($params));
+        $sql = "INSERT INTO {$tableName} ({$fields}) VALUES ($placeholders)";
+        $this->db->execute($sql, $params);
+
         $this->id = $this->db->lastInsertId();
     }
 
-    public function update()
+    protected function update()
     {
         foreach ($this as $key => $value) {
-            if ($key == 'db') {
-                continue;
-            }
-            $statementsToUpdate[] = " {$key} = :{$key} ";
-            $values[":{$key}"] = $value;
+            echo 'Key^ ' . $key;
+            var_dump($value);
         }
-
-        $implodedStatments = implode(',', $statementsToUpdate);
-        $sql = "UPDATE {$this->getTableName()} SET {$implodedStatments} WHERE id={$this->id}";
-        $this->db->execute($sql, $values);
     }
 
     public function delete()

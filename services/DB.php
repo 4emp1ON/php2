@@ -10,11 +10,10 @@ class DB
     private $config = [
         'driver' => 'mysql',
         'host' => 'localhost',
-        'port' => '8889',
         'dbname' => 'gbphp',
         'charset' => 'UTF8',
         'username' => 'root',
-        'password' => 'xq4q5r',
+        'password' => '',
     ];
 
     /**
@@ -28,6 +27,7 @@ class DB
                 $this->config['username'],
                 $this->config['password']
             );
+
             $this->connection->setAttribute(
                 \PDO::ATTR_DEFAULT_FETCH_MODE,
                 \PDO::FETCH_ASSOC
@@ -40,15 +40,19 @@ class DB
     private function getDsn()
     {
         return sprintf(
-            '%s:host=%s;port=%s;dbname=%s;charset=%s',
+            '%s:host=%s;dbname=%s;charset=%s',
                 $this->config['driver'],
                 $this->config['host'],
-                $this->config['port'],
                 $this->config['dbname'],
                 $this->config['charset']
         );
     }
 
+    /**
+     * @param string $sql
+     * @param array $params
+     * @return bool|\PDOStatement
+     */
     protected function query(string $sql, array $params = [])
     {
         $PDOStatement = $this->getConnection()->prepare($sql);
@@ -66,25 +70,26 @@ class DB
         return $this->query($sql, $params)->fetchAll();
     }
 
-    public function findObject($sql, $className, $params = [])
+    public function findObject($sql, $class, $params = [])
     {
-        $statement = $this->query($sql, $params);
-        $statement->setFetchMode(\PDO::FETCH_CLASS, $className);
-        return $statement->fetch();
+        $PDOStatement = $this->query($sql, $params);
+        $PDOStatement->setFetchMode(\PDO::FETCH_CLASS, $class);
+        return $PDOStatement->fetch();
     }
 
-    public function findAllObjects($sql, $className, $params = [])
+    public function findObjects($sql, $class, $params = [])
     {
-        $statement = $this->query($sql, $params);
-        $statement->setFetchMode(\PDO::FETCH_CLASS, $className);
-        return $statement->fetchAll();
+        $PDOStatement = $this->query($sql, $params);
+        $PDOStatement->setFetchMode(\PDO::FETCH_CLASS, $class);
+        return $PDOStatement->fetchAll();
     }
 
     public function execute(string $sql, array $params = [])
     {
         $this->query($sql, $params);
     }
-    public function lastInsertId ()
+
+    public function lastInsertId()
     {
         return $this->getConnection()->lastInsertId();
     }

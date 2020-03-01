@@ -6,8 +6,13 @@ class User extends Model
     public $id;
     public $login;
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'users';
+    }
+
+    public function insert()
+    {
+
     }
 }
