@@ -46,7 +46,7 @@ abstract class Model
         return static::getDB()->findObjects($sql, static::class);
     }
 
-    public function insert()
+    protected function insert()
     {
         $columns = [];
         $params = [];
@@ -70,9 +70,16 @@ abstract class Model
     protected function update()
     {
         foreach ($this as $key => $value) {
-            echo 'Key^ ' . $key;
-            var_dump($value);
+            if ($key == 'db') {
+                continue;
+            }
+            $statementsToUpdate[] = " {$key} = :{$key} ";
+            $values[":{$key}"] = $value;
         }
+
+        $implodedStatments = implode(',', $statementsToUpdate);
+        $sql = "UPDATE {$this->getTableName()} SET {$implodedStatments} WHERE id={$this->id}";
+        $this->db->execute($sql, $values);
     }
 
     public function delete()

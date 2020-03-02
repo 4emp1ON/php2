@@ -10,10 +10,11 @@ class DB
     private $config = [
         'driver' => 'mysql',
         'host' => 'localhost',
+        'port' => '8889',
         'dbname' => 'gbphp',
         'charset' => 'UTF8',
         'username' => 'root',
-        'password' => '',
+        'password' => 'xq4q5r',
     ];
 
     /**
@@ -40,9 +41,10 @@ class DB
     private function getDsn()
     {
         return sprintf(
-            '%s:host=%s;dbname=%s;charset=%s',
+            '%s:host=%s;port=%s;dbname=%s;charset=%s',
                 $this->config['driver'],
                 $this->config['host'],
+                $this->config['port'],
                 $this->config['dbname'],
                 $this->config['charset']
         );

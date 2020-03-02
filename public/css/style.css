@@ -1,0 +1,16 @@
+.goods-layout {
+    display: flex;
+    margin: 0 -5px;
+}
+
+.card-position {
+    margin: 10px 5px;
+}
+
+.good-layout,.page-header {
+    margin: 20px 5px;
+}
+
+form input {
+    margin-bottom: 10px
+}
