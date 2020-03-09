@@ -1,22 +1,27 @@
 <?php
 
-use App\services\DB;
-use App\models\Good;
 use App\services\Autoload;
 
 include dirname(__DIR__) . "/services/Autoload.php";
 spl_autoload_register([new Autoload(), 'loadClass']);
 
-//var_dump((new Good())->getOne($_GET['id']));
-//var_dump((new Good())->getAllObjects());
+$controllerName = 'good';
+if (!empty($_GET['c'])) {
+    $controllerName = $_GET['c'];
+}
 
-$good = new Good();
+$actionName = '';
+if (!empty($_GET['a'])) {
+    $actionName = $_GET['a'];
+}
 
-//$good->setId(2);
-$good->setPrice(120);
-$good->setName('Test');
-$good->setInfo('Наш товар, ваш купец');
+$controllerClass = 'App\\controllers\\' . ucfirst($controllerName) . 'Controller';
 
-$good->save();
+if (class_exists($controllerClass)) {
+    /** @var App\controllers\GoodController $controller */
+    $controller = new $controllerClass;
+    echo $controller->run($actionName);
+}
 
-var_dump($good);
+
+

@@ -28,6 +28,7 @@ class DB
                 $this->config['username'],
                 $this->config['password']
             );
+
             $this->connection->setAttribute(
                 \PDO::ATTR_DEFAULT_FETCH_MODE,
                 \PDO::FETCH_ASSOC
@@ -49,6 +50,11 @@ class DB
         );
     }
 
+    /**
+     * @param string $sql
+     * @param array $params
+     * @return bool|\PDOStatement
+     */
     protected function query(string $sql, array $params = [])
     {
         $PDOStatement = $this->getConnection()->prepare($sql);
@@ -66,25 +72,26 @@ class DB
         return $this->query($sql, $params)->fetchAll();
     }
 
-    public function findObject($sql, $className, $params = [])
+    public function findObject($sql, $class, $params = [])
     {
-        $statement = $this->query($sql, $params);
-        $statement->setFetchMode(\PDO::FETCH_CLASS, $className);
-        return $statement->fetch();
+        $PDOStatement = $this->query($sql, $params);
+        $PDOStatement->setFetchMode(\PDO::FETCH_CLASS, $class);
+        return $PDOStatement->fetch();
     }
 
-    public function findAllObjects($sql, $className, $params = [])
+    public function findObjects($sql, $class, $params = [])
     {
-        $statement = $this->query($sql, $params);
-        $statement->setFetchMode(\PDO::FETCH_CLASS, $className);
-        return $statement->fetchAll();
+        $PDOStatement = $this->query($sql, $params);
+        $PDOStatement->setFetchMode(\PDO::FETCH_CLASS, $class);
+        return $PDOStatement->fetchAll();
     }
 
     public function execute(string $sql, array $params = [])
     {
         $this->query($sql, $params);
     }
-    public function lastInsertId ()
+
+    public function lastInsertId()
     {
         return $this->getConnection()->lastInsertId();
     }
