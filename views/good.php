@@ -9,7 +9,7 @@
         <p><?= $good->getInfo() ?></p>
         <a href="#"><button type="button" class="btn btn-success">Купить</button>
         </a>
-        <a href="/?a=edit&id=<?= $good->getId() ?>"><button type="button" class="btn btn-secondary">Изменить</button>
+        <a href="/?c=good&a=edit&id=<?= $good->getId() ?>"><button type="button" class="btn btn-secondary">Изменить</button>
         </a>
     </div>
 </div>

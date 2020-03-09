@@ -1,16 +1,39 @@
+{% extends 'main.twig' %}
+
+{% block title %}
+    {% if good %}
+        Изменить товар
+    {% else %}
+        Добавить новый товар
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
 <div class="col-4">
-<h2 class="page-header"><?= $title ?></h2>
+<h2 class="page-header">{{ title }}</h2>
 
 <form class="d-flex flex-column ma-10" onsubmit="event.preventDefault()" METHOD="POST">
-    <?= isset($good) ? '<label for="id">Id</label>' : ''?>
-    <input type="text" id="id" name = 'id' <?= isset($good) ? "value=" . $good->getId() . ' disabled' : 'style="display:none"' ?> >
-    <label for="name">Name</label>
-    <input type="text" id="name" name = 'name' value="<?= isset($good) ? $good->getName() : '' ?>">
-    <label for="info">Info</label>
-    <input type="text" id="info" name = 'info' value="<?= isset($good) ? $good->getInfo() : '' ?>">
-    <label for="price">Price</label>
-    <input type="text" id="price" name = 'price' value="<?= isset($good) ? $good->getPrice() : '' ?>">
-    <button class="btn btn-success col-6" onclick="saveData()">Сохранить</button>
+    {% if good %}
+        <label for="id">Id</label>
+        <input type="text" id="id" name = 'id' value="{{ good.getId }}" disabled>
+        <label for="name">Name</label>
+        <input type="text" id="name" name = 'name' value="{{ good.getName }}">
+        <label for="info">Info</label>
+        <input type="text" id="info" name = 'info' value="{{ good.getInfo }}">
+        <label for="price">Price</label>
+        <input type="text" id="price" name = 'price' value="{{ good.getPrice }}">
+        <button class="btn btn-success col-6" onclick="saveData()">Сохранить</button>
+    {% else %}
+        <input type="text" id="id" name = 'name' disabled style="display: none">
+        <label for="name">Name</label>
+        <input type="text" id="name" name = 'name'>
+        <label for="info">Info</label>
+        <input type="text" id="info" name = 'info'>
+        <label for="price">Price</label>
+        <input type="text" id="price" name = 'price'>
+        <button class="btn btn-success col-6" onclick="saveData()">Сохранить</button>
+    {% endif %}
 </form>
     <div id="msg" class="badge badge-primary text-wrap" style="width: 12rem;"></div>
 </div>
@@ -49,3 +72,4 @@
     }
     }
 </script>
+{% endblock %}

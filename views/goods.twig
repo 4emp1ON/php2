@@ -1,0 +1,24 @@
+{% extends "main.twig" %}
+
+{% block title %}
+    Каталог товаров
+{% endblock %}
+
+{% block content %}
+<h2 class="d-flex justify-content-center"><?= $title ?></h2>
+<div class="goods-layout container d-flex flex-row flex-wrap justify-content-around">
+    {% for good in goods  %}
+        <div class="card-position card" style="width: 18rem;">
+            <img src="https://via.placeholder.com/286x180" class="card-img-top" alt="{{ good.name|e }}">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ good.getName|e }}</h5>
+                <p class="card-text">{{ good.getInfo|e }}</p>
+                <p class="card-text">{{ good.getPrice|e }}</p>
+                <a href="?a=one&id={{ good.getId|e }}" class="btn btn-primary mt-auto">Подробнее</a>
+            </div>
+        </div>
+    {% else %}
+        <h3>Товары не найдены</h3>
+    {% endfor %}
+</div>
+{% endblock %}

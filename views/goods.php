@@ -11,6 +11,7 @@
             <div class="card-body">
                 <h5 class="card-title"><?= $good->getName() ?></h5>
                 <p class="card-text"><?= $good->getInfo() ?></p>
+                <p class="card-text"><?= $good->getPrice() . " руб." ?></p>
                 <a href="?a=one&id=<?= $good->getId()?>" class="btn btn-primary">Подробнее</a>
             </div>
         </div>
