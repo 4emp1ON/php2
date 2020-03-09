@@ -1,9 +1,8 @@
 <?php
 
-use App\services\Autoload;
+use App\services\renders\TwigRenderer;
 
-include dirname(__DIR__) . "/services/Autoload.php";
-spl_autoload_register([new Autoload(), 'loadClass']);
+include dirname(__DIR__) . "/vendor/autoload.php";
 
 $controllerName = 'good';
 if (!empty($_GET['c'])) {
@@ -18,8 +17,8 @@ if (!empty($_GET['a'])) {
 $controllerClass = 'App\\controllers\\' . ucfirst($controllerName) . 'Controller';
 
 if (class_exists($controllerClass)) {
-    /** @var App\controllers\GoodController $controller */
-    $controller = new $controllerClass;
+    /** @var App\controllers\Controller $controller */
+    $controller = new $controllerClass(new TwigRenderer());
     echo $controller->run($actionName);
 }
 

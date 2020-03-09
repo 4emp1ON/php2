@@ -1,0 +1,21 @@
+{% extends 'main.twig' %}
+
+{% block title %}
+    Описание товара {{  good.getName|e|lower }}
+{% endblock %}
+
+{% block content %}
+<h2 class="page-header">Описание товара:</h2>
+
+<div class="good-layout media position-relative">
+    <img src="https://via.placeholder.com/144x144" class="mr-3" alt="{{ good.getName|e }}">
+    <div class="media-body">
+        <h5 class="mt-0">{{ good.getName|e }}</h5>
+        <p>{{ good.getInfo|e }}</p>
+        <a href="#"><button type="button" class="btn btn-success">Купить</button>
+        </a>
+        <a href="/?c=good&a=edit&id={{ good.getId|e }}"><button type="button" class="btn btn-secondary">Изменить</button>
+        </a>
+    </div>
+</div>
+{% endblock %}
