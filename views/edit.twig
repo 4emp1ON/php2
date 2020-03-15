@@ -44,31 +44,37 @@
         const name = document.getElementById('name').value;
         const info = document.getElementById('info').value;
         const price = document.getElementById('price').value;
+        const params = {
+            'id' : id,
+            'name' : name,
+            'info' : info,
+            'price' : price,
+        };
 
 
         if (!id) {
-            fetch(`/?a=fetchEdit&name=${name}&info=${info}&price=${price}`, {method: 'POST'})
-                .then(response => console.log(response.json()
+            fetch(`/good/fetchEdit/?name=${name}&info=${info}&price=${price}`, {method: 'POST'})
+                .then(response => response.json()
                     .then(data => {
                         const el = document.querySelector('#msg');
                         el.innerText = 'Товар удачно сохранен';
 
                         setTimeout(clearMessage, 2000);
-                    })));
+                    }));
         } else {
-            fetch(`/?a=fetchEdit&id=${id}&name=${name}&info=${info}&price=${price}`, {method: 'POST'})
-                .then(response => console.log(response.json()
+            fetch(`/good/fetchEdit/?id=${id}&name=${name}&info=${info}&price=${price}`, {method: 'POST'})
+                .then(response => response.json()
                 .then(data => {
                     const el = document.querySelector('#msg');
                     el.innerText = 'Товар удачно сохранен';
 
                     setTimeout(clearMessage, 2000);
-                })));
+                }));
         }
 
     function clearMessage() {
         document.querySelector('#msg').innerHTML = '';
-        document.location.href = '/?c=good&a=all'
+        document.location.href = '/good/all/'
     }
     }
 </script>

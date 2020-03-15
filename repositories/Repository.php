@@ -1,20 +1,22 @@
 <?php
-namespace App\models;
+namespace App\repositories;
 
+use App\entities\Entity;
 use App\services\DB;
 
 /**
  * Class Model
  * @property $id
  */
-abstract class Model
+abstract class Repository
 {
     /**
      * @var DB
      */
     protected $db;
 
-    abstract protected static function getTableName():string ;
+    abstract protected function getTableName():string ;
+    abstract protected function getEntityName():string ;
 
     /**
      * Model constructor.
@@ -32,26 +34,26 @@ abstract class Model
         return DB::getInstance();
     }
 
-    public static function getOne($id)
+    public function getOne($id)
     {
-        $tableName = static::getTableName();
+        $tableName = $this->getTableName();
         $sql = "SELECT * FROM {$tableName} WHERE id = :id";
-        return static::getDB()->findObject($sql, static::class, [':id' => $id]);
+        return static::getDB()->findObject($sql, $this->getEntityName(), [':id' => $id]);
     }
 
-    public static function getAll()
+    public function getAll()
     {
-        $tableName = static::getTableName();
+        $tableName = $this->getTableName();
         $sql = "SELECT * FROM {$tableName}";
-        return static::getDB()->findObjects($sql, static::class);
+        return static::getDB()->findObjects($sql, $this->getEntityName());
     }
 
-    protected function insert()
+    protected function insert(Entity $entity)
     {
         $columns = [];
         $params = [];
-        foreach ($this as $key => $value) {
-            if ($key === 'db') {
+        foreach ($entity as $key => $value) {
+            if ($key === 'db' || $key ==='currency') {
                 continue;
             }
             $columns[] = $key;
@@ -64,13 +66,13 @@ abstract class Model
         $sql = "INSERT INTO {$tableName} ({$fields}) VALUES ($placeholders)";
         $this->db->execute($sql, $params);
 
-        $this->id = $this->db->lastInsertId();
+        $entity ->id = $this->db->lastInsertId();
     }
 
-    protected function update()
+    protected function update(Entity $entity)
     {
-        foreach ($this as $key => $value) {
-            if ($key == 'db') {
+        foreach ($entity as $key => $value) {
+            if ($key == 'db' || $key=='currency') {
                 continue;
             }
             $statementsToUpdate[] = " {$key} = :{$key} ";
@@ -78,23 +80,23 @@ abstract class Model
         }
 
         $implodedStatments = implode(',', $statementsToUpdate);
-        $sql = "UPDATE {$this->getTableName()} SET {$implodedStatments} WHERE id={$this->id}";
+        $sql = "UPDATE {$this->getTableName()} SET {$implodedStatments} WHERE id={$entity->id}";
         $this->db->execute($sql, $values);
     }
 
-    public function delete()
+    public function delete(Entity $entity)
     {
         $sql = "DELETE FROM {$this->getTableName()} WHERE id = :id";
-        $this->db->execute($sql, [':id' => $this->id]);
+        $this->db->execute($sql, [':id' => $entity->id]);
     }
 
-    public function save()
+    public function save(Entity $entity)
     {
-        if (!$this->id) {
-            $this->insert();
+        if (!$entity->getId()) {
+            $this->insert($entity);
             return;
         }
 
-        $this->update();
+        $this->update($entity);
     }
 }

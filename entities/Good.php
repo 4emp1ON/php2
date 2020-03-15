@@ -1,17 +1,15 @@
 <?php
-namespace App\models;
+namespace App\entities;
 
-class Good extends Model
+
+class Good extends Entity
 {
-    protected $id;
-    protected $name;
-    protected $info;
-    protected $price;
+    public $id;
+    public $name;
+    public $info;
+    public $price;
+    public $currency = ' руб.';
 
-    protected static function  getTableName(): string
-    {
-        return 'goods';
-    }
 
     /**
      * @return mixed
@@ -66,7 +64,7 @@ class Good extends Model
      */
     public function getPrice()
     {
-        return $this->price;
+        return $this->price ;
     }
 
     /**
@@ -76,5 +74,23 @@ class Good extends Model
     {
         $this->price = $price;
     }
+
+    /**
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
+    }
+
+
 
 }

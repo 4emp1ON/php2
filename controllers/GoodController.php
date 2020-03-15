@@ -1,11 +1,12 @@
 <?php
 namespace App\controllers;
 
-use App\models\Good;
-use App\services\renders\TmplRenderer;
+use App\entities\Good;
 
 class GoodController extends Controller
 {
+    protected $repository;
+
     public function indexAction()
     {
         return $this->render('home');
@@ -14,32 +15,33 @@ class GoodController extends Controller
 
     public function oneAction()
     {
-        $id = (int)$_GET['id'];
-        $good = Good::getOne($id);
+        $id = $this->getId();
+        $good = $this->app->goodRepository->getOne($id);
         return $this->render(
             'good',
             [
                 'good' => $good,
                 'title' => 'Католог товаров',
+                'msg' => $this->request->getMsg(),
             ]
         );
     }
 
     public function allAction()
-    {
-        $goods = Good::getAll();
-        return $this->render(
-            'goods',
-            [
-                'goods' => $goods,
-                'title' => 'Католог товаров',
-            ]
-        );
-    }
+{
+    $goods = $this->app->goodRepository->getAll();
+    return $this->render(
+        'goods',
+        [
+            'goods' => $goods,
+            'title' => 'Католог товаров',
+        ]
+    );
+}
 
     public function editAction()
     {
-        if (empty($_GET['id'])){
+        if (empty($this->getId())){
             return $this->render(
                 'edit',
                 [
@@ -47,8 +49,8 @@ class GoodController extends Controller
                 ]
             );
         }
-        $id = (int)$_GET['id'];
-        $good = Good::getOne($id);
+        $id = $this->getId();
+        $good = $this->app->goodRepository->getOne($id);
         return $this->render(
             'edit',
             [
@@ -71,29 +73,33 @@ class GoodController extends Controller
 
     public function fetchEditAction()
     {
-        header('Content-Type: application/json');;
+        header('Content-Type: application/json');
 
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        if (!$this->request->isPost()) {
             return json_encode([
                 'success' => false,
-                'error' => 'Ошибка доступа'
+                'error' => '123'
             ]);
         }
         if (!empty($_GET['name']) && !empty($_GET['info'] && !empty($_GET['price']))) {
             $good = new Good();
-            if (!empty($_GET['id'])) {
-                $good->setId($_GET['id']);
+            if (!empty($this->getId())) {
+                $good->setId($this->getId());
             }
             $good->setName($_GET['name']);
             $good->setInfo($_GET['info']);
             $good->setPrice($_GET['price']);
 
-            $good->save();
+            $this->app->goodRepository->save($good);
             $params = [
                 'success' => true,
+                'good' => $good
             ];
-            echo json_encode($params);
+            return json_encode($params);
         }
 
+        return [];
+
     }
+
 }

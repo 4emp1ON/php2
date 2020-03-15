@@ -8,9 +8,23 @@
 }
 
 .good-layout,.page-header {
-    margin: 20px 5px;
+    margin: 20px 5px !important;
 }
 
 form input {
     margin-bottom: 10px
+}
+
+.good-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.good-buttons a {
+    flex-grow: 1;
+}
+
+.good-buttons a:first-child {
+    margin-right: 10px;
 }
