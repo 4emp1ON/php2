@@ -1,0 +1,57 @@
+{% extends 'main.twig' %}
+
+{% block title %}
+    Вход пользователя
+{% endblock %}
+
+{% block content %}
+    <h1>Вход пользователя</h1>
+    <form action="/user/login" method="post">
+        <div class="form-group">
+            <label for="userName">Логин</label>
+            <input type="text" class="form-control" id="userName" name="userName" autofocus>
+        </div>
+        <div class="form-group">
+            <label for="Password">Пароль</label>
+            <input type="password" class="form-control" id="Password" name="password">
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Вход</button>
+        <button type="submit" class="btn btn-info">Регистрация</button>
+    </form>
+
+    {% if msg %}
+        <button id="modalButton" type="button" class="btn btn-success" data-toggle="modal"
+                data-target=".bd-example-modal-sm" hidden></button>
+        <div id='myModal' class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <p class="d-flex flex-row justify-content-center m-3">{{ msg|e }}</p>
+                </div>
+                <button id="hideModal" type="button" class="btn btn-secondary" data-dismiss="modal" hidden>Close
+                </button>
+            </div>
+        </div>
+    {% endif %}
+    <script>
+        window.onload = () => {
+            if (document.getElementById('hideModal')) {
+
+                document.getElementById('modalButton').click();
+
+            }
+            setTimeout(hideModal, 1000);
+        }
+
+        function hideModal() {
+            if (document.getElementById('hideModal')) {
+                document.getElementById('hideModal').click();
+            }
+            document.getElementById('userName').focus();
+        }
+    </script>
+{% endblock %}

@@ -23,6 +23,7 @@ class GoodController extends Controller
                 'good' => $good,
                 'title' => 'Католог товаров',
                 'msg' => $this->request->getMsg(),
+                'user' => $this->request->getSession('user'),
             ]
         );
     }
@@ -35,6 +36,7 @@ class GoodController extends Controller
         [
             'goods' => $goods,
             'title' => 'Католог товаров',
+            'msg' => $this->request->getMsg()
         ]
     );
 }
@@ -60,16 +62,6 @@ class GoodController extends Controller
         );
     }
 
-
-    public function ajaxAction()
-    {
-        header('Content-type: application/json');
-        $params = [
-            'error' => 'asdasd',
-            'hello' => 'world',
-        ];
-        return json_encode($params);
-    }
 
     public function fetchEditAction()
     {

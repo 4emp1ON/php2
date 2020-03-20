@@ -43,7 +43,7 @@ class CartService
         }
 
         $app->request->setSession('good', $goods);
-        return 'Товар успешно добавлен';
+        return 'Товар успешно добавлен в корзину';
     }
 
     public function drop($id, App $app) {
@@ -59,6 +59,19 @@ class CartService
             }
         }
         $app->request->setSession('good', $goods);
-        return 'Товар удален';
+        return 'Товар удален из корзины';
+    }
+
+    public function clearCart(App $app) {
+        $app->request->setSession('good', '');
+        return 'Корзина очищена';
+    }
+
+    public function calcTotal(App $app) {
+        $goods = $app->request->getSession('good');
+        $prices = array_map(function ($good){
+            return (int)$good['price'] * (int)$good['count'];
+        }, $goods);
+        return array_sum($prices);
     }
 }

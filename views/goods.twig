@@ -15,8 +15,8 @@
                 <p class="card-text">{{ good.getInfo|e }}</p>
                 <p class="card-text">{{ good.getPrice|e }}{{ good.getCurrency }}</p>
                 <div class="good-buttons mt-auto">
-                <a href="/good/one/?id={{ good.getId|e }}" class="btn btn-primary">Подробнее</a>
-                <a href="/cart/add/?id={{ good.getId|e }}" class="btn btn-success mt-auto">Купить</a>
+                <a href="/good/one/?id={{ good.getId|e }}" class="btn btn-primary d-flex align-items-center justify-content-center">Подробнее</a>
+                <a href="/cart/add/?id={{ good.getId|e }}" class="btn btn-success mt-auto">В корзину</a>
                 </div>
             </div>
         </div>
@@ -24,4 +24,5 @@
         <h3>Товары не найдены</h3>
     {% endfor %}
 </div>
+
 {% endblock %}

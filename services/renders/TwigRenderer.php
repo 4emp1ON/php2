@@ -22,6 +22,10 @@ class TwigRenderer implements IRenderer
     public function render($template, $params = [])
     {
         $template .= '.twig';
+        if (!empty($_SESSION['user'])){
+            $user = $_SESSION['user'];
+            $params['user'] = $user;
+        }
         return $this->twig->render($template, $params);
     }
 }

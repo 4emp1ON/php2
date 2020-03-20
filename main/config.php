@@ -23,6 +23,12 @@ return [
         'goodRepository' => [
           'class' => \App\repositories\GoodRepository::class
         ],
+        'userRepository' => [
+            'class' => \App\repositories\UserRepository::class
+        ],
+        'orderRepository' => [
+            'class' => \App\repositories\OrderRepository::class
+        ],
         'request' => [
             'class' => \App\services\Request::class
         ],

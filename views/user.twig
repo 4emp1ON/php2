@@ -1,0 +1,33 @@
+{% extends 'main.twig' %}
+
+{% block title %}
+    {% if user %}
+    Здравствуй, {{ user.name }}
+    {% else %}
+    Как ты здесь оказался?
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <p>Добро пожаловать в личный кабинет, {{ user.name }}</p>
+    <p>Ваш id: {{ user.id }}</p>
+    <a href="/user/logout"><button type="button" class="btn btn-danger">Выход</button></a>
+    
+    <h2>Ваши заказы: </h2>
+    <div class="d-flex flex-column">
+    {% for key, order in orders%}
+        <div class="order d-flex">
+        {{ order.id }}
+        <div class="goods col-5">
+        {% for good in order.goods  %}
+        {{ good.name }}
+    {% endfor %}
+        </div>
+        <div class="col-2">{{ order.orderDate }}</div>
+        <div class="col-2">{{ order.address }}</div>
+        <div class="col-2">{{ order.total }} руб.</div>
+        </div>
+        {% endfor %}</div>
+
+{% endblock %}

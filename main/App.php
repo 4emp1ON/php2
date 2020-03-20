@@ -5,6 +5,8 @@ namespace App\main;
 
 
 use App\repositories\GoodRepository;
+use App\repositories\OrderRepository;
+use App\repositories\UserRepository;
 use App\services\CartService;
 use App\services\DB;
 use App\services\renders\TwigRenderer;
@@ -18,6 +20,8 @@ use App\services\TSingleton;
  * @property DB db
  * @property TwigRenderer renderer
  * @property GoodRepository goodRepository
+ * @property UserRepository userRepository
+ * @property OrderRepository orderRepository
  * @property Request request
  * @property CartService cartService
  */

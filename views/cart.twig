@@ -16,8 +16,24 @@
                 <a href="/cart/drop/?id={{ key }}" class="btn btn-danger p-10">Удалить</a>
             </div>
         </div>
+
     {% else %}
         <h3>Корзина пуста</h3>
     {% endfor %}
+
+    <h4>Итого: {{ total }} руб.</h4>
+
+    <form action="/cart/order/" method="post">
+        <div class="form-row">
+            <div class="col">
+                <input type="email" required class="form-control" placeholder="E-mail" name="email">
+            </div>
+            <div class="col">
+                <input type="text" required class="form-control" placeholder="Адрес доставки" name="address">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Оформить заказ</button>
+
+    </form>
 </div>
 {% endblock %}

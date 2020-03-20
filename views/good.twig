@@ -14,44 +14,14 @@
             <h5 class="mt-0">{{ good.getName|e }}</h5>
             <p>{{ good.getInfo|e }}</p>
             <a href="/cart/add/?id={{ good.getId|e }}">
-                <button type="button" class="btn btn-success">Купить</button>
+                <button type="button" class="btn btn-success">Добавить в корзину</button>
             </a>
+            {% if user.isAdmin == 1 %}
             <a href="/good/edit/?id={{ good.getId|e }}">
                 <button type="button" class="btn btn-secondary">Изменить</button>
             </a>
+            {% endif %}
+
         </div>
     </div>
-
-    {% if msg %}
-
-
-        <button id="modalButton" type="button" class="btn btn-success" data-toggle="modal"
-                data-target=".bd-example-modal-sm" hidden></button>
-        <div id='myModal' class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm modal-dialog-centered">
-                <div class="modal-content">
-                    <p class="d-flex flex-row justify-content-center m-3">{{ msg|e }}</p>
-                </div>
-                <button id="hideModal" type="button" class="btn btn-secondary" data-dismiss="modal" hidden>Close
-                </button>
-            </div>
-        </div>
-    {% endif %}
-    <script>
-        window.onload = () => {
-            if (document.getElementById('hideModal')) {
-
-                document.getElementById('modalButton').click();
-
-            }
-            setTimeout(hideModal, 1000);
-        }
-
-        function hideModal() {
-            if (document.getElementById('hideModal')) {
-                document.getElementById('hideModal').click();
-            }
-        }
-    </script>
 {% endblock %}

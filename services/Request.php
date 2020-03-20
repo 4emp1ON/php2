@@ -84,6 +84,16 @@ class Request
         return $this->params['get'][$name];
     }
 
+    public function post($name = '') {
+        if (empty($name)){
+            return $this->params['post'];
+        }
+        if (empty($this->params['post'][$name])){
+            return [];
+        }
+        return $this->params['post'][$name];
+    }
+
     public function getSession($key) {
         if (empty($key)){
             return $_SESSION;
