@@ -2,9 +2,9 @@
 
 {% block title %}
     {% if user %}
-    Здравствуй, {{ user.name }}
+        Здравствуй, {{ user.name }}
     {% else %}
-    Как ты здесь оказался?
+        Как ты здесь оказался?
     {% endif %}
 {% endblock %}
 
@@ -12,22 +12,39 @@
     <h1>{{ title }}</h1>
     <p>Добро пожаловать в личный кабинет, {{ user.name }}</p>
     <p>Ваш id: {{ user.id }}</p>
-    <a href="/user/logout"><button type="button" class="btn btn-danger">Выход</button></a>
-    
+    <a href="/user/logout">
+        <button type="button" class="btn btn-danger">Выход</button>
+    </a>
+
     <h2>Ваши заказы: </h2>
     <div class="d-flex flex-column">
-    {% for key, order in orders%}
-        <div class="order d-flex">
-        {{ order.id }}
-        <div class="goods col-5">
-        {% for good in order.goods  %}
-        {{ good.name }}
-    {% endfor %}
+        <div class="order d-flex mb-2">
+            #
+            <div class="goods col-5">
+                Товары в заказе
+            </div>
+            <div class="col-2">Дата</div>
+            <div class="col-2">Email</div>
+            <div class="col-2">Сумма</div>
+            <div class="col-1">Отмена</div>
         </div>
-        <div class="col-2">{{ order.orderDate }}</div>
-        <div class="col-2">{{ order.address }}</div>
-        <div class="col-2">{{ order.total }} руб.</div>
-        </div>
+        {% for key, order in orders %}
+            <div class="order d-flex mb-2">
+                {{ order.id }}
+                <div class="goods col-5">
+                    {% for good in order.goods %}
+                        {{ good.name }}
+                    {% endfor %}
+                </div>
+                <div class="col-2">{{ order.orderDate }}</div>
+                <div class="col-2">{{ order.address }}</div>
+                <div class="col-2">{{ order.total }} руб.</div>
+                <div class="col-1">
+                    <a href="/cart/cancelOrder/?id={{ order.id }}">
+                        <button class="btn btn-danger">Отменить</button>
+                    </a>
+                </div>
+            </div>
         {% endfor %}</div>
 
 {% endblock %}

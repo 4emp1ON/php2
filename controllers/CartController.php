@@ -1,4 +1,5 @@
 <?php
+
 namespace App\controllers;
 
 
@@ -7,7 +8,8 @@ use App\entities\Order;
 class CartController extends Controller
 {
 
-    public function indexAction() {
+    public function indexAction()
+    {
         return $this->render(
             'cart',
             [
@@ -27,14 +29,16 @@ class CartController extends Controller
         $this->redirect();
     }
 
-    public function dropAction() {
+    public function dropAction()
+    {
         $id = $this->getId();
         $msg = $this->app->cartService->drop($id, $this->app);
         $this->request->addMsg($msg);
         $this->redirect();
     }
 
-    public function orderAction(){
+    public function orderAction()
+    {
         if (!$this->request->isPost()) {
             $this->request->addMsg('Неверные параметры запроса');
             $this->redirect('/cart/');
@@ -57,6 +61,22 @@ class CartController extends Controller
         } else {
             $this->request->addMsg('Ошибка формирования заказа');
             $this->redirect('/user/lk');
+        }
+    }
+
+    public function cancelOrderAction()
+    {
+        $id = $this->request->get('id');
+        if (empty($id) || !$this->request->isGet()) {
+            $this->request->addMsg('Неправильный id заказа');
+            $this->redirect('/user/lk/');
+        }
+        $order = $this->app->orderRepository->getOne($id);
+        $user = $this->request->getSession('user');
+        if ($user->id === $order->userId || $user->isAdmin == 1) {
+            $this->app->orderRepository->delete($order);
+            $this->request->addMsg('Заказ отменен');
+            $this->redirect();
         }
     }
 }
